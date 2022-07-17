@@ -1,6 +1,9 @@
 #include <cstdlib>
 #include <ctime>
+#include <random>
 #include "sort.h"
+
+using namespace std;
 
 template<typename T>
 void swap(T arr[], int s, int t) {
@@ -14,6 +17,11 @@ int partition(T arr[], int left, int right) {
 
     srand(time(0));
     int pivot = left + rand() % (right - left + 1);
+//    random_device rd;
+//    default_random_engine eng(rd());
+//    uniform_int_distribution<int> distr(left, right);
+//
+//    int pivot = distr(eng);
     swap(arr, left, pivot);
 
     T base = arr[left];
