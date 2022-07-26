@@ -1,9 +1,8 @@
 #include <iostream>
-#include <fstream>
 
 using namespace std;
 
-const int MAXM = 10001;
+#define MAXM 10001
 
 struct Edge {
     int to;
@@ -61,7 +60,6 @@ void query(int root, int &ans) {
 
     if (ans != -1) return;
     visit[root] = true;
-    int temp = head[root];
 
     if (visit[one] && visit[two]) {
         if (root == one) ans = findFather(two);
@@ -69,17 +67,18 @@ void query(int root, int &ans) {
         return;
     }
 
-    while (temp != -1) {
-        query(edge[temp].to, ans);
-        unionFather(root, edge[temp].to);
-        temp = edge[temp].next;
+    int next = head[root];
+    while (next != -1) {
+        query(edge[next].to, ans);
+        unionFather(root, edge[next].to);
+        next = edge[next].next;
     }
 }
 
 int main() {
 
-    ifstream cin("../a.in");
-    ofstream cout("../a.out");
+    freopen("../a.in", "r", stdin);
+    freopen("../a.out", "w", stdout);
 
     int t, a, b;
     cin >> t;
