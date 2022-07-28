@@ -34,36 +34,29 @@ int find(vector<vector<int>> &snowMountain, vector<vector<int>> &f, int i, int j
 
 int main() {
 
-    ifstream fin("a.in");
-    ofstream fout("a.out");
+    freopen("../a.in", "r", stdin);
+    freopen("../a.out", "w", stdout);
+
     double startTime = clock();
 
     int i, j, r, c, maxHeight = 0;
 
-    fin >> r >> c;
+    cin >> r >> c;
 
     vector<vector<int>> snowMountain(r, vector<int>(c, 0));
     vector<vector<int>> f(r, vector<int>(c, -1));
 
     for (i = 0; i < r; i++)
         for (j = 0; j < c; j++)
-            fin >> snowMountain[i][j];
+            cin >> snowMountain[i][j];
 
     for (i = 0; i < r; i++)
         for (j = 0; j < c; j++) {
             maxHeight = maxOfTwo(maxHeight, find(snowMountain, f, i, j, r, c));
         }
 
-    fout << maxHeight << endl;
+    cout << maxHeight << endl;
     double endTime = clock();
-    fout << "The run time is: " << (double) (endTime - startTime) / CLOCKS_PER_SEC << "s" << endl;
-    fin.close();
-    fout.close();
+    cout << "The run time is: " << (double) (endTime - startTime) / CLOCKS_PER_SEC << "s" << endl;
     return 0;
-}
-
-int find() {
-    for (int i=0;i < 1;++i) {
-
-    }
 }
