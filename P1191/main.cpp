@@ -17,24 +17,13 @@ int min(int x, int y) {
     return x < y ? x : y;
 }
 
-int main() {
-
-    freopen("../a.in", "r", stdin);
-    freopen("../a.out", "w", stdout);
-
-    int n;
-    double average;
-    cin >> n;
-
+void init() {
     for (int i = 1; i <= 8; ++i) {
         for (int j = 1; j <= 8; ++j) {
             cin >> chessboard[i][j];
             sum[i][j] = sum[i - 1][j] + sum[i][j - 1] - sum[i - 1][j - 1] + chessboard[i][j];
         }
     }
-
-    // 初始化
-    average = sum[N - 1][N - 1] * 1.0 / n;
     for (int i = 1; i < N; ++i) {
         for (int j = 1; j < N; ++j) {
             for (int k = i; k < N; ++k) {
@@ -44,7 +33,17 @@ int main() {
             }
         }
     }
+}
 
+int main() {
+
+    freopen("../a.in", "r", stdin);
+    freopen("../a.out", "w", stdout);
+
+    int n;
+    cin >> n;
+
+    init();
     int s = 0;
     for (int t = 1; t < n; ++t) {
         s = 1 - s;
@@ -71,6 +70,7 @@ int main() {
         }
     }
 
+    double average = sum[N - 1][N - 1] * 1.0 / n;
     double ans = d[s][1][1][8][8] * 1.0 / n - average * average;
     printf("%.3lf", sqrt(ans));
 
