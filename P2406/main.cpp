@@ -1,10 +1,16 @@
 #include <iostream>
+#include <cstring>
 
 using namespace std;
 
 #define MAXN 1000001
+
 char st[MAXN];
 int g_next[MAXN], n;
+
+int max(int a, int b) {
+    return a > b ? a : b;
+}
 
 void get_next() {
     int i = 0, j = -1;
@@ -12,26 +18,26 @@ void get_next() {
     while (i < n) {
         if (j == -1 || st[i] == st[j]) {
             g_next[++i] = ++j;
-            int k = i - g_next[i];
-            if (i % k == 0 && i / k > 1) {
-                printf("%d %d\n", i, i / k);
-            }
         } else {
             j = g_next[j];
         }
     }
+
+    int ans = 1, k = i - g_next[i];
+
+    if (i % k == 0) {
+        ans = max(ans, i / k);
+    }
+    printf("%d\n", ans);
 }
 
 int main() {
 
     freopen("../a.in", "r", stdin);
 
-    int i = 1;
-    while (scanf("%d", &n) && n != 0) {
-        scanf("%s", st);
-        printf("Test case #%d\n", i++);
+    while (scanf("%s", st) && st[0] != '.') {
+        n = (int) strlen(st);
         get_next();
-        printf("\n");
     }
 
     return 0;
