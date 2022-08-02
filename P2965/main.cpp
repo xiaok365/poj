@@ -1,14 +1,9 @@
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
-const int d[5][2] = {{0,  0},
-                     {0,  1},
-                     {-1, 0},
-                     {0,  -1},
-                     {1,  0}};
-
-int origin[4][4] = {0}, map[4][4] = {0};
+int origin[4][4] = {0}, map[4][4] = {0}, ans = 17, plan;
 
 void init() {
     for (int i = 0; i < 4; ++i) {
@@ -21,20 +16,21 @@ void init() {
 void flip(int state) {
     int row = state / 4, column = state % 4;
 
-    int dx, dy;
-    for (int i = 0; i < 5; ++i) {
-        dx = row + d[i][0];
-        dy = column + d[i][1];
-        if (dx >= 0 && dx < 4 && dy >= 0 && dy < 4) {
-            map[dx][dy] = !map[dx][dy];
-        }
+    for (int i = 0; i < 4; ++i) {
+        map[row][i] = !map[row][i];
     }
+
+    for (int i = 0; i < 4; ++i) {
+        map[i][column] = !map[i][column];
+    }
+
+    map[row][column] = !map[row][column];
 }
 
 bool find() {
     for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < 4; ++j) {
-            if (map[i][j] != map[0][0]) {
+            if (map[i][j] == 0) {
                 return false;
             }
         }
@@ -59,15 +55,14 @@ int main() {
     for (int i = 0; i < 4; ++i) {
         scanf("%s", ch);
         for (int j = 0; j < 4; ++j) {
-            if (ch[j] == 'b') {
+            if (ch[j] == '-') {
                 origin[i][j] = 1;
             }
         }
     }
 
-    int ans = 17, k;
     for (int i = 0; i < 65536; ++i) {
-        k = count_one(i);
+        int k = count_one(i);
         if (k > ans) {
             continue;
         }
@@ -79,14 +74,22 @@ int main() {
         }
 
         if (find()) {
+            int tmp = ans;
             ans = min(ans, k);
+            if (tmp != ans) {
+                plan = i;
+            }
         }
     }
 
-    if (ans == 17) {
-        cout << "Impossible" << endl;
-    } else {
-        cout << ans << endl;
+    cout << ans << endl;
+    for (int i = 1; i <= 4; ++i) {
+        for (int j = 1; j <= 4; ++j) {
+            if (plan & 1) {
+                printf("%d %d\n", i, j);
+            }
+            plan >>= 1;
+        }
     }
 
     return 0;
