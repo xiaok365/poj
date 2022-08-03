@@ -10,14 +10,6 @@ const int d[5][2] = {{0,  0},
 
 int origin[4][4] = {0}, map[4][4] = {0};
 
-void init() {
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            map[i][j] = origin[i][j];
-        }
-    }
-}
-
 void flip(int state) {
     int row = state / 4, column = state % 4;
 
@@ -26,7 +18,7 @@ void flip(int state) {
         dx = row + d[i][0];
         dy = column + d[i][1];
         if (dx >= 0 && dx < 4 && dy >= 0 && dy < 4) {
-            map[dx][dy] = !map[dx][dy];
+            map[dx][dy] ^= 1;
         }
     }
 }
@@ -65,13 +57,13 @@ int main() {
         }
     }
 
-    int ans = 17, k;
+    int ans = 17;
     for (int i = 0; i < 65536; ++i) {
-        k = count_one(i);
-        if (k > ans) {
+        int k = count_one(i);
+        if (k >= ans) {
             continue;
         }
-        init();
+        memcpy(map, origin, sizeof(origin));
         for (int j = 0; j < 16; ++j) {
             if (i >> j & 1) {
                 flip(j);
@@ -79,7 +71,7 @@ int main() {
         }
 
         if (find()) {
-            ans = min(ans, k);
+            ans = k;
         }
     }
 

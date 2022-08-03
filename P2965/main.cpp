@@ -1,41 +1,17 @@
 #include <iostream>
-#include <algorithm>
 
 using namespace std;
 
-int origin[4][4] = {0}, map[4][4] = {0}, ans = 17, plan;
+// 第i行全为1
+const int row_state[4] = {15, 240, 3840, 61440};
+// 第j列全为1
+const int column_state[4] = {4369, 8738, 17476, 34952};
 
-void init() {
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            map[i][j] = origin[i][j];
-        }
-    }
-}
-
-void flip(int state) {
-    int row = state / 4, column = state % 4;
-
-    for (int i = 0; i < 4; ++i) {
-        map[row][i] = !map[row][i];
-    }
-
-    for (int i = 0; i < 4; ++i) {
-        map[i][column] = !map[i][column];
-    }
-
-    map[row][column] = !map[row][column];
-}
-
-bool find() {
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            if (map[i][j] == 0) {
-                return false;
-            }
-        }
-    }
-    return true;
+void flip(int &current, int pos) {
+    int row = pos / 4, column = pos % 4;
+    current ^= row_state[row];
+    current ^= column_state[column];
+    current ^= (1 << pos);
 }
 
 int count_one(int n) {
@@ -47,48 +23,75 @@ int count_one(int n) {
     return total;
 }
 
+// 打印状态
+void display(int state) {
+    char a[4][4];
+    for (int i = 3; i >= 0; --i) {
+        for (int j = 3; j >= 0; --j) {
+            if (state & 1) {
+                a[i][j] = '-';
+            } else {
+                a[i][j] = '+';
+            }
+            state >>= 1;
+        }
+    }
+
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            cout << a[i][j];
+        }
+        cout << endl;
+    }
+}
+
+
 int main() {
 
     freopen("../a.in", "r", stdin);
 
     char ch[4];
+    int state = 0;
     for (int i = 0; i < 4; ++i) {
         scanf("%s", ch);
         for (int j = 0; j < 4; ++j) {
             if (ch[j] == '-') {
-                origin[i][j] = 1;
+                state += 1;
             }
+            state <<= 1;
         }
     }
+    state >>= 1;
 
+    int ans = 17, plan;
     for (int i = 0; i < 65536; ++i) {
         int k = count_one(i);
-        if (k > ans) {
+        if (k >= ans) {
             continue;
         }
-        init();
+
+        int current = state;
+        // 枚举bit位为1的进行翻转
         for (int j = 0; j < 16; ++j) {
             if (i >> j & 1) {
-                flip(j);
+                flip(current, j);
             }
         }
 
-        if (find()) {
-            int tmp = ans;
-            ans = min(ans, k);
-            if (tmp != ans) {
-                plan = i;
-            }
+        if (current == 65535) {
+            ans = k;
+            plan = i;
         }
     }
 
-    cout << ans << endl;
+    printf("%d\n", ans);
+    int t = 1 << 15;
     for (int i = 1; i <= 4; ++i) {
         for (int j = 1; j <= 4; ++j) {
-            if (plan & 1) {
+            if (plan & t) {
                 printf("%d %d\n", i, j);
             }
-            plan >>= 1;
+            t >>= 1;
         }
     }
 
