@@ -89,13 +89,8 @@ void init() {
     }
 }
 
-int main() {
-
-    freopen("../a.in", "r", stdin);
-
+bool spfa() {
     Cqueue<int> my_queue(10000);
-
-    init();
     my_queue.Push(s);
     dist[s] = v;
 
@@ -107,8 +102,7 @@ int main() {
 
         int current = my_queue.Pop();
         if (v_cnt[current] == n) {
-            printf("YES\n");
-            return 0;
+            return true;
         }
 
         int edge_i = head[current];
@@ -122,7 +116,16 @@ int main() {
         }
     }
 
-    printf("NO\n");
+    return false;
+}
+
+int main() {
+
+    freopen("../a.in", "r", stdin);
+
+    init();
+
+    if (spfa()) printf("YES\n"); else printf("NO\n");
 
     return 0;
 }
