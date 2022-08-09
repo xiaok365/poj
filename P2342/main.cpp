@@ -6,15 +6,12 @@ using namespace std;
 #define MAX_N 6001
 
 struct Edge {
-    int to, next;
-
-    Edge() {}
-
+    int to = 0, next = -1;
+    Edge() = default;
     Edge(int t, int n) : to(t), next(n) {}
 };
 
 Edge edge[MAX_N];
-
 int n, value[MAX_N], edge_cnt = 0, head[MAX_N], dp[MAX_N][2], in_degree[MAX_N] = {0};
 
 void add_edge(int from, int to) {
