@@ -6,8 +6,8 @@ using namespace std;
 #define MAX_N 6001
 
 struct Edge {
-    int to = 0, next = -1;
-    Edge() = default;
+    int to, next;
+    Edge();
     Edge(int t, int n) : to(t), next(n) {}
 };
 
