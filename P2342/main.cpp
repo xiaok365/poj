@@ -7,7 +7,7 @@ using namespace std;
 
 struct Edge {
     int to, next;
-    Edge();
+    Edge() {};
     Edge(int t, int n) : to(t), next(n) {}
 };
 
