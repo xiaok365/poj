@@ -70,7 +70,6 @@ int main() {
         solve(0);
         int ans = max(dp[0][0], dp[0][1]);
 
-
         bool unique = true;
 
         if (dp[0][0] == dp[0][1]) {
