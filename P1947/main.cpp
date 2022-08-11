@@ -52,14 +52,14 @@ void solve(int root) {
     else dp[root][1] = son_size[root] + 1;
 
     // 枚举物品
-    for (int son_i = head[root]; son_i != -1; son_i = edge[son_i].next) {
-        int son = edge[son_i].to;
+    for (int i = head[root]; i != -1; i = edge[i].next) {
+        int son = edge[i].to;
         solve(son);
         // 枚举重量
-        for (int i = p; i >= 2; --i) {
+        for (int j = p; j >= 2; --j) {
             // 枚举分组
-            for (int j = 1; j <= p; ++j) {
-                dp[root][i] = min(dp[root][i], dp[root][i - j] + dp[son][j] - 2);
+            for (int k = 1; k < j; ++k) {
+                dp[root][j] = min(dp[root][j], dp[root][j - k] + dp[son][k] - 2);
             }
         }
     }
