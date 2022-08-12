@@ -23,7 +23,7 @@ struct Cqueue {
 Cqueue asc, desc;
 int ans[N][2], k;
 
-int binary_search(Cqueue &que, int x, bool asc_order) {
+void binary_search(Cqueue &que, int x, bool asc_order) {
     int l = que.head, r = que.tail - 1;
     while (l < r) {
         int mid = (l + r) / 2;
@@ -33,42 +33,24 @@ int binary_search(Cqueue &que, int x, bool asc_order) {
             l = mid + 1;
         }
     }
-    return l + 1;
+    if (asc_order && que.data[l].value < x || !asc_order && que.data[l].value > x) que.tail = l + 1;
+    else que.tail = l;
 }
 
 void pop(Cqueue &que, int i) {
     if (!que.IsEmpty() && i - que.Top().index >= k) que.Pop();
 }
 
-// 上升队列
-void push_asc(int x, int i) {
+void push_que(Cqueue &que, int x, int i, bool asc_order) {
 
-    if (asc.IsEmpty()) {
-        asc.Push(x, i);
+    if (que.IsEmpty()) {
+        que.Push(x, i);
         return;
     }
 
-    asc.tail = binary_search(asc, x, true);
-
-    while (!asc.IsEmpty() && asc.data[asc.tail - 1].value >= x) asc.tail--;
-    asc.Push(x, i);
-
-    pop(asc, i);
-}
-
-// 下降队列
-void push_desc(int x, int i) {
-    if (desc.IsEmpty()) {
-        desc.Push(x, i);
-        return;
-    }
-
-    desc.tail = binary_search(desc, x, false);
-
-    while (!desc.IsEmpty() && desc.data[desc.tail - 1].value <= x) desc.tail--;
-    desc.Push(x, i);
-
-    pop(desc, i);
+    binary_search(que, x, asc_order);
+    que.Push(x, i);
+    pop(que, i);
 }
 
 int main() {
@@ -81,11 +63,11 @@ int main() {
     for (int i = 0; i < n; ++i) {
         scanf("%d", &x);
         if (i < k - 1) {
-            push_asc(x, i);
-            push_desc(x, i);
+            push_que(asc, x, i, true);
+            push_que(desc, x, i, false);
         } else {
-            push_asc(x, i);
-            push_desc(x, i);
+            push_que(asc, x, i, true);
+            push_que(desc, x, i, false);
             ans[i - k + 1][0] = asc.Top().value;
             ans[i - k + 1][1] = desc.Top().value;
         }
