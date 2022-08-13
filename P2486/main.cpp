@@ -43,6 +43,7 @@ void init() {
 void solve(int u) {
 
     dp[u][0][0] = dp[u][0][1] = value[u];
+//    for (int i=0; i<=m; ++i) dp[u][i][0] = dp[u][i][1] = value[u];
 
     // 枚举物品
     for (int i = head[u]; i != -1; i = edge[i].next) {
@@ -59,6 +60,11 @@ void solve(int u) {
                 dp[u][j][1] = max(dp[u][j][1], dp[u][j - k - 1][0] + dp[v][k][1]);
             }
         }
+//        printf("u=%d \n",u);
+//        for (int j=0; j<m; ++j){
+//            printf("j=%d %d %d\n",j,dp[u][j][0],dp[u][j][1]);
+//        }
+//        printf("\n");
     }
 }
 
