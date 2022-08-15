@@ -18,6 +18,7 @@ void bron_kerbosch(set<int> &r, set<int> &p, set<int> &x) {
 //        printf("\n");
 
         if (r.size() > ans) ans = r.size();
+        return;
     }
 
     int pivot = *(p.begin());
