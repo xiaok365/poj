@@ -8,7 +8,9 @@ using namespace std;
 
 struct Edge {
     int to, next;
+
     Edge() {}
+
     Edge(int t, int n) : to(t), next(n) {}
 };
 
@@ -30,9 +32,9 @@ int find_id(const string &employee) {
 }
 
 void init() {
-    edge_cnt = 0;
-    name_cnt = 0;
+    edge_cnt = name_cnt = 0;
     memset(head, 0xff, sizeof head);
+
     string boss, a, b;
     cin >> boss;
     name[name_cnt++] = boss;
@@ -43,22 +45,17 @@ void init() {
     }
 }
 
-void solve(int i) {
-    dp[i][1] = 1;
-    dp[i][0] = 0;
-    same[i][0] = false;
-    same[i][1] = false;
-    int son_i = head[i];
+void solve(int u) {
+    dp[u][1] = 1, dp[u][0] = 0;
+    same[u][0] = same[u][1] = false;
 
-    while (son_i != -1) {
-        solve(edge[son_i].to);
-        dp[i][1] += dp[edge[son_i].to][0];
-        same[i][1] |= same[edge[son_i].to][0];
+    for (int i = head[u]; i != -1; i = edge[i].next) {
+        solve(edge[i].to);
+        dp[u][1] += dp[edge[i].to][0];
+        same[u][1] |= same[edge[i].to][0];
 
-        dp[i][0] += max(dp[edge[son_i].to][0], dp[edge[son_i].to][1]);
-        same[i][0] |= dp[edge[son_i].to][0] == dp[edge[son_i].to][1];
-
-        son_i = edge[son_i].next;
+        dp[u][0] += max(dp[edge[i].to][0], dp[edge[i].to][1]);
+        same[u][0] |= dp[edge[i].to][0] == dp[edge[i].to][1];
     }
 }
 
@@ -68,10 +65,8 @@ int main() {
     while (cin >> n && n != 0) {
         init();
         solve(0);
-        int ans = max(dp[0][0], dp[0][1]);
 
         bool unique = true;
-
         if (dp[0][0] == dp[0][1]) {
             unique = false;
         } else if (dp[0][0] > dp[0][1]) {
@@ -80,6 +75,7 @@ int main() {
             if (same[0][1]) unique = false;
         }
 
+        int ans = max(dp[0][0], dp[0][1]);
         if (unique) printf("%d Yes\n", ans); else printf("%d No\n", ans);
     }
 
