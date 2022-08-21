@@ -16,9 +16,7 @@ struct Edge {
 
 
 Edge edge[MAX_M];
-
 int edge_cnt, head[MAX_N], n, cnt[MAX_N], ans, node;
-bool visit[MAX_N];
 
 void add_edge(int from, int to) {
     edge[edge_cnt] = Edge(to, head[from]);
@@ -27,7 +25,6 @@ void add_edge(int from, int to) {
 
 int dfs(int u, int father) {
     int size = 1, cur_max = 0;
-    visit[u] = true;
     for (int i = head[u]; ~i; i = edge[i].next) {
         if (father == edge[i].to) continue;
         int j = dfs(edge[i].to, u);
@@ -47,7 +44,6 @@ void init() {
     edge_cnt = node = 0;
     memset(cnt, 0, sizeof cnt);
     memset(head, 0xff, sizeof head);
-    memset(visit, false, sizeof visit);
 
     scanf("%d", &n);
     int from, to;
