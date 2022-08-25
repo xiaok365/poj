@@ -47,8 +47,8 @@ bool witness(LL d, LL n) {
 
 bool miller_rabin(LL n) {
 
-    if (n <= 1 || n == 4) return false;
-    if (n <= 3) return true;
+    if (n == 2) return true;
+    if (n < 2 || 0 == (n & 1)) return false;
 
     LL d = n - 1;
     while ((d & 1) == 0) d >>= 1;
