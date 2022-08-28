@@ -7,7 +7,6 @@
 int a[N][N];
 
 void init() {
-
     memset(a, 0, sizeof a);
     for (int i = 0; i < MAX_N; ++i) {
         for (int j = 0; j < MAX_M; ++j) {
@@ -17,10 +16,9 @@ void init() {
             if (i < 4) a[t + 6][t] = 1;
             if (j > 0) a[t - 1][t] = 1;
             if (j < 5) a[t + 1][t] = 1;
+            scanf("%d", &a[t][30]);
         }
     }
-
-    for (int i = 0; i < 30; ++i) scanf("%d", &a[i][30]);
 }
 
 void swap(int &s, int &t) {
@@ -29,39 +27,39 @@ void swap(int &s, int &t) {
     t = tmp;
 }
 
-void gauss(int n) {
-    //枚举列
+void gauss(int nm) {
     int r = 0, c = 0;
-    for (; c < n; c++) {
+    //枚举列
+    for (; c < nm; ++c) {
         int t = r;
-        for (int i = r; i < n; i++)
+        for (int i = r; i < nm; ++i)
             if (a[i][c]) {
                 t = i;
                 break;
             }
         if (!a[t][c]) continue;
         //交换两行
-        for (int i = c; i <= n; i++) swap(a[t][i], a[r][i]);
+        for (int i = c; i <= nm; ++i) swap(a[t][i], a[r][i]);
         //从 r + 1行开始消零
-        for (int i = r + 1; i < n; i++)
+        for (int i = r + 1; i < nm; ++i)
             if (a[i][c])
-                for (int j = c; j <= n; j++) a[i][j] ^= a[r][j];
-        r++;
+                for (int j = c; j <= nm; ++j) a[i][j] ^= a[r][j];
+        ++r;
     }
     //判断是否有解
-    if (r < n) {
-        for (int i = r; i < n; i++)
-            if (a[i][n]) {
+    if (r < nm) {
+        for (int i = r; i < nm; ++i)
+            if (a[i][nm]) {
                 printf("no solution\n");
                 break;
             }
         printf("multi solution\n");
     }
 
-    //将所有行消掉0
-    for (int i = n - 1; i >= 0; i--)
-        for (int j = i + 1; j < n; j++)
-            a[i][n] ^= a[i][j] & a[j][n];
+    //将所有行消掉非0
+    for (int i = nm - 1; i >= 0; --i)
+        for (int j = i + 1; j < nm; ++j)
+            a[i][nm] ^= a[i][j] & a[j][nm];
 }
 
 int main() {
