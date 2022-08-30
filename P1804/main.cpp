@@ -44,9 +44,8 @@ int main() {
     int b[MAX_N], n, scenario;
     Node a[MAX_N];
 
-
     scanf("%d", &scenario);
-    for (int i = 0; i < scenario; ++i) {
+    for (int t = 0; t < scenario; ++t) {
         scanf("%d", &n);
 
         for (int i = 0; i < n; ++i) {
@@ -54,12 +53,10 @@ int main() {
             a[i].index = i;
         }
 
+        // 离散
         sort(a, a + n);
-
         cnt = 1;
-
         for (int j = 0; j < n; ++j) {
-
             if (j > 0 && a[j].value == a[j - 1].value) {
                 b[a[j].index] = b[a[j - 1].index];
             } else {
@@ -75,7 +72,7 @@ int main() {
             add(b[i], 1);
         }
 
-        printf("Scenario #%d:\n", i + 1);
+        printf("Scenario #%d:\n", t + 1);
         printf("%lld\n\n", ans);
     }
 
