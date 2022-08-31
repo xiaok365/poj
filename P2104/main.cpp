@@ -113,7 +113,7 @@ int main() {
 
     for (int i = 1; i <= n; ++i) {
         insert(i, 1, n, b[i - 1]);
-//        printf("version %d, d=%d\n", i, d);
+//        printf("version %d, d=%d\n", i, b[i - 1]);
 //        display(version[i]);
     }
 
