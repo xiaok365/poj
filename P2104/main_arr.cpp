@@ -10,10 +10,6 @@ struct Node {
     Node() : l(0), r(0), cnt(0) {
         lson = rson = NULL;
     }
-
-    Node(int l, int r, int cnt) : l(l), r(r), cnt(cnt) {
-        lson = rson = NULL;
-    }
 };
 
 // 树根
