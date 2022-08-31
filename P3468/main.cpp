@@ -33,7 +33,7 @@ struct Node {
     }
 };
 
-LL regionLength(Node *tree) {
+LL length(Node *tree) {
     return tree->right - tree->left + 1;
 }
 
@@ -41,9 +41,9 @@ void update(Node *root) {
 
     if (root->lson == NULL || root->rson == NULL || root->extra == 0) return;
 
-    root->lson->total += root->extra * regionLength(root->lson);
+    root->lson->total += root->extra * length(root->lson);
     root->lson->extra += root->extra;
-    root->rson->total += root->extra * regionLength(root->rson);
+    root->rson->total += root->extra * length(root->rson);
     root->rson->extra += root->extra;
     root->extra = 0;
 }
@@ -65,8 +65,8 @@ void add(Node *root, LL l, LL r, LL x) {
         return;
     }
     if (root->left >= l && root->right <= r) {
-        root->total += x * regionLength(root);
-        if (root->left < root->right)root->extra += x;
+        root->total += x * length(root);
+        if (root->left < root->right) root->extra += x;
         return;
     }
     update(root);
@@ -88,13 +88,13 @@ void query(Node *root, LL l, LL r, LL &sum) {
     query(root->rson, l, r, sum);
 }
 
-void deleteMem(Node *root) {
+void clear(Node *root) {
     if (root == NULL)
         return;
-    deleteMem(root->lson);
-    deleteMem(root->rson);
+    clear(root->lson);
+    clear(root->rson);
     delete root;
-};
+}
 
 void display(Node *root) {
     if (root == NULL)return;
