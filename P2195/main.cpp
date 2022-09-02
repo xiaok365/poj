@@ -12,13 +12,15 @@ struct Point {
     Point(int x, int y) : x(x), y(y) {}
 };
 
-Point man[MAX_N], house[MAX_N];
-int man_cnt, house_cnt, map[MAX_N][MAX_N], level_x[MAX_N], level_y[MAX_N], x[MAX_N], y[MAX_N];
+int cnt, map[MAX_N][MAX_N], level_x[MAX_N], level_y[MAX_N], x[MAX_N], y[MAX_N];
 bool visit_x[MAX_N], visit_y[MAX_N];
 
 void init(int n, int m) {
-    man_cnt = house_cnt = 0;
+
+    Point man[MAX_N], house[MAX_N];
+    int man_cnt = 0, house_cnt = 0;
     char st[MAX_N];
+
     for (int i = 0; i < n; ++i) {
         scanf("%s", st);
         for (int j = 0; j < m; ++j) {
@@ -30,10 +32,12 @@ void init(int n, int m) {
         }
     }
 
+    cnt = man_cnt;
+
     memset(level_y, 0, sizeof level_y);
     memset(level_x, 0x80, sizeof level_x);
-    for (int i = 0; i < man_cnt; ++i) {
-        for (int j = 0; j < house_cnt; ++j) {
+    for (int i = 0; i < cnt; ++i) {
+        for (int j = 0; j < cnt; ++j) {
             map[i][j] = -(abs(house[j].x - man[i].x) + abs(house[j].y - man[i].y));
             level_x[i] = max(level_x[i], map[i][j]);
         }
@@ -42,7 +46,7 @@ void init(int n, int m) {
 
 bool hungary(int u, int &min_slack) {
     visit_x[u] = true;
-    for (int i = 0; i < house_cnt; ++i) {
+    for (int i = 0; i < cnt; ++i) {
         if (level_x[u] + level_y[i] == map[u][i]) {
             if (!visit_y[i]) {
                 visit_y[i] = true;
@@ -63,8 +67,7 @@ int km() {
     memset(x, 0xff, sizeof x);
     memset(y, 0xff, sizeof y);
 
-    for (int i = 0; i < man_cnt; ++i) {
-        if (x[i] != -1) continue;
+    for (int i = 0; i < cnt; ++i) {
         while (true) {
             memset(visit_x, false, sizeof visit_x);
             memset(visit_y, false, sizeof visit_y);
@@ -72,14 +75,14 @@ int km() {
             // 找到匹配
             if (hungary(i, min_slack)) break;
             // 降低标准
-            for (int j = 0; j < man_cnt; ++j) {
+            for (int j = 0; j < cnt; ++j) {
                 if (visit_x[j]) level_x[j] -= min_slack;
                 if (visit_y[j]) level_y[j] += min_slack;
             }
         }
     }
     int ans = 0;
-    for (int i = 0; i < man_cnt; ++i) ans -= map[i][x[i]];
+    for (int i = 0; i < cnt; ++i) ans -= map[i][x[i]];
     return ans;
 }
 
