@@ -53,6 +53,24 @@ bool walk_down(const char text[], SuffixNode *cur, int pos) {
     return false;
 }
 
+// 新建内部点
+SuffixNode *split_node(const char text[], int pos, SuffixNode *next) {
+    // 新建内部点
+    int *splitEnd = new int;
+    *splitEnd = next->start + active_length - 1;
+    SuffixNode *split = new_node(next->start, splitEnd, root);
+    active_node->child[active_edge] = split;
+    // 末尾新点
+    split->child[to(text[pos])] = new_node(pos, &leaf_end, NULL);
+    next->start += active_length;
+    // 原点下移
+    split->child[to(text[next->start])] = next;
+    if (last_node != NULL) {
+        last_node->suffix_link = split;
+    }
+    return split;
+}
+
 //新增后缀
 void insert_ukkonen(const char text[], int pos) {
     leaf_end = pos;
@@ -81,20 +99,8 @@ void insert_ukkonen(const char text[], int pos) {
                 active_length++;
                 break;
             }
-            // 新建内部点
-            int *splitEnd = new int;
-            *splitEnd = next->start + active_length - 1;
-            SuffixNode *split = new_node(next->start, splitEnd, root);
-            active_node->child[active_edge] = split;
-            // 末尾新点
-            split->child[to(text[pos])] = new_node(pos, &leaf_end, NULL);
-            next->start += active_length;
-            // 原点下移
-            split->child[to(text[next->start])] = next;
-            if (last_node != NULL) {
-                last_node->suffix_link = split;
-            }
-            last_node = split;
+            // 分裂
+            last_node = split_node(text, pos, next);
         }
         remaining--;
         if (active_node == root && active_length > 0) {
