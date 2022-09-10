@@ -42,13 +42,11 @@ int bfs(int n, int m) {
         for (int i = 0; i < 3; ++i) {
             int dx = move(i, x);
             if (valid(dx)) {
-                // 表示从i方向走过来的，方便后续回溯路径
                 visit[dx] = true;
                 if (dx == m) {
                     step = d + 1;
                     break;
                 }
-                // 新坐标入队
                 queue[tail] = Node(dx, d + 1);
                 tail = (tail + 1) % (MAX_N);
             }
