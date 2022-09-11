@@ -15,7 +15,7 @@ bool check(double mid) {
     sort(z, z + n);
     double tot = 0;
     for (int i = n - 1; i >= m; --i) tot += z[i];
-    return tot >= 0;
+    return tot > 0;
 }
 
 int main() {
