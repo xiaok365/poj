@@ -12,19 +12,12 @@ struct Node {
     }
 };
 
-Node arr[1000];
-int cnt = 0;
-
-Node *new_node() {
-    return &arr[cnt++];
-}
-
 void insert(Node *root, char st[], int order) {
     Node *p = root;
     for (int i = 0; i < strlen(st); ++i) {
         int t = st[i] - '0';
         if (!p->son[t]) {
-            p->son[t] = new_node();
+            p->son[t] = new Node;
         }
         p->son[t]->v = order;
         p = p->son[t];
@@ -54,8 +47,6 @@ int main() {
     while (~scanf("%s", st)) {
         Node root;
         order++;
-        memset(arr, 0, sizeof arr);
-
         bool flag = true;
         while (st[0] != '9') {
             if (find(&root, st, order)) {
