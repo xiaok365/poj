@@ -8,10 +8,6 @@ using namespace std;
 struct Rectangle {
     double x1, y1, x2, y2;
     int y1_i, y2_i;
-
-    bool operator<(const Rectangle &other) const {
-        return x1 < other.x1;
-    }
 };
 
 struct Point {
@@ -28,7 +24,6 @@ struct Point {
     }
 };
 
-
 struct SegmentNode {
     int l, r, cnt, extra;
     SegmentNode *lson, *rson;
@@ -41,7 +36,7 @@ struct SegmentNode {
 };
 
 SegmentNode arr[MAX_N * 10];
-int node_cnt = 0;
+int node_cnt;
 
 Rectangle a[MAX_N];
 Point point_x[MAX_N * 2], point_y[MAX_N * 2];
