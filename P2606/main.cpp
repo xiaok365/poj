@@ -44,7 +44,7 @@ int main() {
         }
         sort(ratio, ratio + cnt);
         int len = 1;
-        for (int j = 1; j < cnt; ++j) {
+        for (int j = 1; j <= cnt; ++j) {
             if (ratio[j].x == ratio[j - 1].x && ratio[j].y == ratio[j - 1].y) {
                 len++;
             } else {
