@@ -17,7 +17,7 @@ struct Node {
 
 template<typename T>
 struct Queue {
-    static const int MAX_QUEUE_LEN = 500010;
+    static const int MAX_QUEUE_LEN = 100010;
     int head, tail;
     T data[MAX_QUEUE_LEN];
 
@@ -76,11 +76,10 @@ void bfs(Node *root) {
 }
 
 Node *find_next(Node *root, Node *cur, char ch) {
-    ch = ch - 'A';
-    while (!cur->child[ch] && cur != root) {
+    while (!cur->child[ch - 'A'] && cur != root) {
         cur = cur->fail;
     }
-    if (cur->child[ch]) return cur->child[ch];
+    if (cur->child[ch - 'A']) return cur->child[ch - 'A'];
     else return cur;
 }
 
