@@ -1,100 +1,96 @@
 #include <iostream>
-#include <fstream>
 
 using namespace std;
 
-#define INF 1000000000L
-
-const int MAXN = 1000010;
+#define INF 10000000000L
+#define MAX_N 1000010
+#define LL long long
 
 struct Edge {
-    long long to, value, next;
+    int to, value, next;
 
     Edge() {}
 
-    Edge(long long t, long long v, long long n) : to(t), value(v), next(n) {}
+    Edge(int t, int v, int n) : to(t), value(v), next(n) {}
 };
 
-long long n, m, head[MAXN], edgeCnt, a[MAXN][3], queue[MAXN];
-long long d[MAXN];
-Edge edge[MAXN];
-bool visit[MAXN];
+template<typename T>
+struct Queue {
+    int head, tail;
+    T data[MAX_N];
+
+    Queue() : head(0), tail(0) { memset(data, 0, sizeof data); }
+
+    bool is_not_empty() { return head != tail; }
+
+    void push(T t) {
+        data[tail] = t;
+        tail = (tail + 1) % MAX_N;
+    }
+
+    T pop() {
+        head = (head + 1) % MAX_N;
+        return data[(head - 1 + MAX_N) % MAX_N];
+    }
+};
+
+int n, m, head[MAX_N], edgeCnt, a[MAX_N][3];
+LL d[MAX_N];
+Edge edge[MAX_N];
+bool visit[MAX_N];
 
 void init() {
     edgeCnt = 0;
-    memset(head, 0xff, MAXN * 4);
-    memset(visit, false, MAXN);
+    memset(head, 0xff, sizeof head);
+    memset(visit, false, sizeof visit);
     for (int i = 2; i <= n; ++i) d[i] = INF;
 }
 
-void addEdge(long long from, long long to, long long value) {
+void add_edge(int from, int to, int value) {
     edge[edgeCnt] = Edge(to, value, head[from]);
     head[from] = edgeCnt++;
 }
 
-long long spfa() {
-
-    long long top = 0, tail = 1;
-    queue[0] = 1;
+LL spfa() {
+    Queue<int> queue;
+    queue.push(1);
     visit[1] = true;
     d[1] = 0;
-
-    while (top != tail) {
-        long long u = queue[top];
-        top = (top + 1) % (MAXN);
+    while (queue.is_not_empty()) {
+        LL u = queue.pop();
         visit[u] = false;
-        long long headPoint = head[u];
-        while (headPoint != -1) {
-            Edge &temp = edge[headPoint];
-            if (d[u] + temp.value < d[temp.to]) {
-                d[temp.to] = d[u] + temp.value;
-                if (!visit[temp.to]) {
-                    queue[tail] = temp.to;
-                    tail = (tail + 1) % (MAXN);
-                    if (tail + 1 == top) {
-                        cout << "queue full" << endl;
-                        return 0;
-                    }
-                    visit[temp.to] = true;
+        for (int i = head[u]; ~i; i = edge[i].next) {
+            Edge &t = edge[i];
+            if (d[u] + t.value < d[t.to]) {
+                d[t.to] = d[u] + t.value;
+                if (!visit[t.to]) {
+                    queue.push(t.to);
+                    visit[t.to] = true;
                 }
             }
-            headPoint = temp.next;
         }
     }
 
-    long long ans = 0;
-    for (int i = 2; i <= n; ++i) {
-        ans += d[i];
-    }
-    return ans;
+    LL ret = 0;
+    for (int i = 2; i <= n; ++i) ret += d[i];
+    return ret;
 }
 
 int main() {
-
-    ifstream cin("../a.in");
-    ofstream cout("../a.out");
-
+    freopen("../a.in", "r", stdin);
     int t;
-//    cin >> t;
     scanf("%d", &t);
     while (t--) {
-//        cin >> n >> m;
-        scanf("%d%d", &n, &m);
+        scanf("%d %d", &n, &m);
         init();
         for (int i = 0; i < m; ++i) {
-            cin >> a[i][0] >> a[i][1] >> a[i][2];
-            scanf("%d%d%d", a[i], a[i] + 1, a[i] + 2);
-//            addEdge(a[i][0], a[i][1], a[i][2]);
+            scanf("%d %d %d", &a[i][0], &a[i][1], &a[i][2]);
+            add_edge(a[i][0], a[i][1], a[i][2]);
         }
-        long long ans = 0;
-        ans += spfa();
+        LL ans = spfa();
         init();
-        for (int i = 0; i < m; ++i) {
-            addEdge(a[i][1], a[i][0], a[i][2]);
-        }
-        ans += spfa();
-//        cout << ans << endl;
-        printf("%ld\n", ans);
+        for (int i = 0; i < m; ++i) add_edge(a[i][1], a[i][0], a[i][2]);
+        printf("%lld\n", ans + spfa());
     }
     return 0;
 }
