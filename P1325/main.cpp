@@ -1,7 +1,7 @@
 #include <iostream>
 
 #define MAX_N 101
-int n, m, left[MAX_N], right[MAX_N];
+int n, m, right[MAX_N];
 bool map[MAX_N][MAX_N], visit[MAX_N];
 
 bool hungary(int u) {
@@ -9,7 +9,6 @@ bool hungary(int u) {
         if (!visit[i] && map[u][i]) {
             visit[i] = true;
             if (right[i] == -1 || hungary(right[i])) {
-                left[u] = i;
                 right[i] = u;
                 return true;
             }
@@ -20,7 +19,6 @@ bool hungary(int u) {
 
 void init() {
     memset(map, false, sizeof map);
-    memset(left, 0xff, sizeof left);
     memset(right, 0xff, sizeof right);
 
     int task;
@@ -35,20 +33,14 @@ void init() {
 int main() {
     freopen("../a.in", "r", stdin);
 
-    scanf("%d", &n);
-    while (n > 0) {
+    while (scanf("%d", &n) && n > 0) {
         init();
         int ans = 0;
         for (int i = 0; i < n; ++i) {
-            if (left[i] == -1) {
-                memset(visit, false, sizeof visit);
-                if (hungary(i)) {
-                    ans++;
-                }
-            }
+            memset(visit, false, sizeof visit);
+            ans += hungary(i);
         }
         printf("%d\n", ans);
-        scanf("%d", &n);
     }
 
     return 0;
