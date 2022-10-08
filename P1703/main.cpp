@@ -18,8 +18,7 @@ int find(int s) {
 }
 
 void unite(int s, int e) {
-    int fs = find(s);
-    int fe = find(e);
+    int fs = find(s), fe = find(e);
     if (fs == fe) return;
     if (father[fs] > father[fe]) {
         father[fe] = father[fs] + father[fe];
