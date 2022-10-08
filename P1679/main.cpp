@@ -25,30 +25,27 @@ void init() {
     memset(father, 0xff, sizeof father);
 }
 
-int find(int s) {
-    int root = s;
+int find(int x) {
+    int root = x;
     while (father[root] >= 0) {
         root = father[root];
     }
-    while (s != root) {
-        int temp = father[s];
-        father[s] = root;
-        s = temp;
+    while (x != root) {
+        int t = father[x];
+        father[x] = root;
+        x = t;
     }
     return root;
 }
 
 void unite(int a, int b) {
-    int fa = find(a);
-    int fb = find(b);
+    int fa = find(a), fb = find(b);
     if (fa == fb) return;
     int weight = father[fa] + father[fb];
     if (father[fa] > father[fb]) {
-        father[fa] = fb;
-        father[fb] = weight;
+        father[fa] = fb, father[fb] = weight;
     } else {
-        father[fb] = fa;
-        father[fa] = weight;
+        father[fb] = fa, father[fa] = weight;
     }
 }
 
