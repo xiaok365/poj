@@ -25,7 +25,7 @@ void init() {
     memset(father, 0xff, sizeof father);
 }
 
-int find_father(int s) {
+int find(int s) {
     int root = s;
     while (father[root] >= 0) {
         root = father[root];
@@ -38,17 +38,17 @@ int find_father(int s) {
     return root;
 }
 
-void union_set(int s, int e) {
-    int rootS = find_father(s);
-    int rootE = find_father(e);
-    if (rootS == rootE) return;
-    int weight = father[rootS] + father[rootE];
-    if (father[rootS] > father[rootE]) {
-        father[rootS] = rootE;
-        father[rootE] = weight;
+void unite(int a, int b) {
+    int fa = find(a);
+    int fb = find(b);
+    if (fa == fb) return;
+    int weight = father[fa] + father[fb];
+    if (father[fa] > father[fb]) {
+        father[fa] = fb;
+        father[fb] = weight;
     } else {
-        father[rootE] = rootS;
-        father[rootS] = weight;
+        father[fb] = fa;
+        father[fa] = weight;
     }
 }
 
@@ -58,25 +58,25 @@ int main() {
     scanf("%d", &t);
     while (t--) {
         init();
-        int ans = 0, i = 0, tail = -1, can = 0, real = 0;
+        int ans = 0, i = 0, tail = -1, possible = 0, actual = 0;
         bool unique = true;
         while (i < m) {
             if (i == tail + 1) {
-                can = real = 0;
+                possible = actual = 0;
                 for (int j = i; j <= m; ++j) {
                     if (edge[j].value != edge[i].value) {
                         tail = j - 1;
                         break;
                     }
-                    if (find_father(edge[j].from) != find_father(edge[j].to)) can++;
+                    if (find(edge[j].from) != find(edge[j].to)) possible++;
                 }
             }
-            if (find_father(edge[i].from) != find_father(edge[i].to)) {
-                union_set(edge[i].from, edge[i].to);
+            if (find(edge[i].from) != find(edge[i].to)) {
+                unite(edge[i].from, edge[i].to);
                 ans += edge[i].value;
-                real++;
+                actual++;
             }
-            if (i == tail && can != real) {
+            if (i == tail && possible != actual) {
                 unique = false;
                 break;
             }
