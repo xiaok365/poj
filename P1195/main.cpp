@@ -1,17 +1,16 @@
 #include <iostream>
-#include <fstream>
 
 using namespace std;
 
-const int MAXN = 1025;
+#define MAXN 1025
 
 int f[MAXN][MAXN] = {0}, n;
 
 int lowbit(int x) {
-    return x & (-x);
+    return x & -x;
 }
 
-void add(int x, int y, int value) {
+void update(int x, int y, int value) {
     for (int i = x; i <= n; i += lowbit(i)) {
         for (int j = y; j <= n; j += lowbit(j)) {
             f[i][j] += value;
@@ -19,7 +18,7 @@ void add(int x, int y, int value) {
     }
 }
 
-int sum(int x, int y) {
+int query(int x, int y) {
     int ans = 0;
     for (int i = x; i > 0; i -= lowbit(i)) {
         for (int j = y; j > 0; j -= lowbit(j)) {
@@ -30,24 +29,22 @@ int sum(int x, int y) {
 }
 
 int main() {
-
-    ifstream cin("../a.in");
-    ofstream cout("../a.out");
-    int instruction;
-    while (cin >> instruction && instruction != 3) {
-        switch (instruction) {
+    freopen("../a.in", "r", stdin);
+    int op;
+    while (scanf("%d", &op) && op != 3) {
+        switch (op) {
             case 0:
-                cin >> n;
+                scanf("%d", &n);
                 break;
             case 1:
                 int i, j, value;
-                cin >> i >> j >> value;
-                add(i + 1, j + 1, value);
+                scanf("%d %d %d", &i, &j, &value);
+                update(i + 1, j + 1, value);
                 break;
             case 2:
                 int l, b, r, t;
-                cin >> l >> b >> r >> t;
-                cout << sum(r + 1, t + 1) + sum(l, b) - sum(r + 1, b) - sum(l, t + 1) << endl;
+                scanf("%d %d %d %d", &l, &b, &r, &t);
+                printf("%d\n", query(r + 1, t + 1) + query(l, b) - query(r + 1, b) - query(l, t + 1));
                 break;
             default:;
         }
