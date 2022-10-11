@@ -2,9 +2,9 @@
 
 using namespace std;
 
-#define MAXN 1025
+#define MAX_N 1025
 
-int f[MAXN][MAXN] = {0}, n;
+int f[MAX_N][MAX_N] = {0}, n;
 
 int lowbit(int x) {
     return x & -x;
