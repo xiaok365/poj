@@ -1,23 +1,19 @@
+// Copyright 2016 Kyle Wilson
 #include <iostream>
-#include <fstream>
-
-using namespace std;
+using std::cin;
+using std::cout;
 
 int main() {
+  freopen("../a.in", "r", stdin);
+  freopen("../a.out", "w", stdout);
 
-    ifstream cin("../a.in");
-    ofstream cout("../a.out");
+  double sum = 0, s;
 
-    double sum = 0, s;
+  for (int i = 0; i < 12; ++i) {
+    cin >> s;
+    sum += s;
+  }
 
-    for (int i = 0; i < 12; ++i) {
-        cin >> s;
-        sum += s;
-    }
-
-    cout << "$" << sum / 12 << endl;
-
-    cin.close();
-    cout.close();
-    return 0;
+  cout << "$" << sum / 12 << std::endl;
+  return 0;
 }
