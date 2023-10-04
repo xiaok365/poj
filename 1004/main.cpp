@@ -4,8 +4,8 @@ using std::cin;
 using std::cout;
 
 int main() {
-  freopen("../a.in", "r", stdin);
-  freopen("../a.out", "w", stdout);
+  freopen("a.in", "r", stdin);
+  freopen("a.out", "w", stdout);
 
   double sum = 0, s;
 
